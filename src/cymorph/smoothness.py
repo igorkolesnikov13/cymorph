@@ -1,4 +1,4 @@
-from cymorph.cython_smoothness import get_smoothness
+from cymorph.cython_smoothness import get_smoothness, filter_butterworth_2d
 from scipy.stats.stats import pearsonr, spearmanr
 from scipy import signal
 import numpy as np
@@ -11,6 +11,7 @@ class Smoothness:
         self.segmented_mask = segmented_mask
         self.smoothing_degradation = smoothing_degradation
         self.butterworth_order = butterworth_order
+        self.height, self.width = self.clean_image.shape
 
         self.smoothness()
         
@@ -32,8 +33,7 @@ class Smoothness:
         return ax
 
     def get_smoothed_image(self):
-        B, A = signal.butter(N = self.butterworth_order, Wn = self.smoothing_degradation, output='ba')
-        smoothed_image_aux = np.asarray(signal.filtfilt(B, A, self.clean_image), dtype=np.float32)
+        smoothed_image_aux = filter_butterworth_2d(self.clean_image, self.smoothing_degradation, self.butterworth_order, self.height/2)
 
         return smoothed_image_aux * self.segmented_mask
 
