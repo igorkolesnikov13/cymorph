@@ -28,11 +28,11 @@ It is implemented ... in C with Python bindings via Cython
 Installation
 ------------
 
-**Dependencies:**
+Dependencies ::
 
     pip install numpy scipy matplotlib seaborn sep
 
-**CyMorph (currently in tesing mode)**
+CyMorph (currently in tesing mode) ::
 
     pip install -i https://test.pypi.org/simple/ cymorph
 
