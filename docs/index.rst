@@ -17,6 +17,7 @@ Each survey requires a specific and highly detailed image preparing algorithm (c
 It is implemented ... in C with Python bindings via Cython
 
 **Available metrics:**
+
 - Concentration
 - Asymmetry
 - Smoothness
@@ -28,12 +29,12 @@ Installation
 ------------
 
 **Dependencies:**
-```
-pip install numpy scipy matplotlib seaborn sep
-```
+
+    pip install numpy scipy matplotlib seaborn sep
+
 **CyMorph (currently in tesing mode)**
-```
-pip install -i https://test.pypi.org/simple/ cymorph
+
+    pip install -i https://test.pypi.org/simple/ cymorph
 
 Usage Guide
 -----------
