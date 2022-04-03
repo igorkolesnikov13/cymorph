@@ -38,11 +38,17 @@ class Smoothness:
         return smoothed_image_aux * self.segmented_mask
 
     def get_pearsonr(self):
-        symmetry_pearsonr_correlation_coeficient  = pearsonr(self.smoothness_v1, self.smoothness_v2)[0]
+        try:
+            symmetry_pearsonr_correlation_coeficient  = pearsonr(self.smoothness_v1, self.smoothness_v2)[0]
+        except TypeError:
+            return None
         
         return (1 - symmetry_pearsonr_correlation_coeficient)
     
     def get_spearmanr(self):
-        symmetry_spearmanr_correlation_coeficient = spearmanr(self.smoothness_v1, self.smoothness_v2)[0]
+        try:
+            symmetry_spearmanr_correlation_coeficient = spearmanr(self.smoothness_v1, self.smoothness_v2)[0]
+        except TypeError:
+            return None
         
         return (1 - symmetry_spearmanr_correlation_coeficient)
