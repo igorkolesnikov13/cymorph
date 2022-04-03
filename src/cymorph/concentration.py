@@ -7,9 +7,11 @@ class Concentration:
         self.clean_image = clean_image
         self.radius1 = radius1
         self.radius2 = radius2
+        self.rp = rp
+        self.growth_curve = growth_curve
+        self.growth_radii = growth_radii
 
         if rp is None:
-            
             ############################## Subtract Background #######################################
             self.background = sep.Background(
                 self.clean_image, 
@@ -44,10 +46,6 @@ class Concentration:
 
             ########################### Estimate an Eta Profile to Define Petrosian Radius ############################ 
             self._eta_func_ellipse()
-        else:
-            self.rp = rp
-            self.growth_curve = growth_curve
-            self.growth_radii = growth_radii
 
 
 
@@ -140,7 +138,7 @@ class Concentration:
             try:
                 self._interpolate_eta_ellipse()
             except IndexError:
-                return -9999
+                return np.nan
             
             ########################## Define Growth Curve (acc.) and limit it to valid range #######################
             self.growth_radii = self.scales * self.obj['a']
@@ -151,7 +149,7 @@ class Concentration:
             if radius1_value != np.nan or radius2_value != np.nan:
                 return np.log10(radius1_value / radius2_value)[0]
             else:
-                return -9999
+                return np.nan
         else:
             numbers_around = 5
             curve = self.growth_curve[self.growth_radii <= 2*self.rp]
