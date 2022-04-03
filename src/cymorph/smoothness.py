@@ -1,7 +1,5 @@
 from cymorph.cython_smoothness import get_smoothness, filter_butterworth_2d
 from scipy.stats.stats import pearsonr, spearmanr
-from scipy import signal
-import numpy as np
 import matplotlib.pyplot as plt
 
 class Smoothness:

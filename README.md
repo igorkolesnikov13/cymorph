@@ -41,7 +41,7 @@ a.get_collected_points_plot()
 ### Smoothness
 ```
 from cymorph.smoothness import Smoothness
-s = Smoothness(clean_image, segmented_mask, segmented_image, smoothing_degradation, butterworth_order) 
+s = Smoothness(clean_image, segmented_mask, smoothing_degradation, butterworth_order) 
 s.get_pearsonr() 
 s.get_spearmanr()
 s.get_smoothed_image()
