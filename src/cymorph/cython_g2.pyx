@@ -315,7 +315,9 @@ cdef class G2:
         self.get_asymmetryc_field_new()
 
         confluence = self.get_confluence()
-
-        g2 = (float(self.assimetric_pixel_count) / float(self.valid_pixels_count)) * (2.0 - confluence)
+        if float(self.valid_pixels_count) > 0:
+            g2 = (float(self.assimetric_pixel_count) / float(self.valid_pixels_count)) * (2.0 - confluence)
+        else:
+            g2 = self.f_nan
 
         return g2, self.gradient_x, self.gradient_y, self.gradient_asymmetric_x, self.gradient_asymmetric_y, self.modules_normalized, self.phases
