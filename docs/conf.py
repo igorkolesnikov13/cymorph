@@ -21,7 +21,6 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
-    'numpydoc',
     'nbsphinx',
     'IPython.sphinxext.ipython_console_highlighting'
 ]
