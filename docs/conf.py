@@ -23,8 +23,13 @@ extensions = [
     'sphinx.ext.intersphinx',
     'numpydoc',
     'nbsphinx',
-    'IPython.sphinxext.ipython_console_highlighting'
+    'IPython.sphinxext.ipython_console_highlighting',
+    'sphinxcontrib.bibtex'
 ]
+
+bibtex_bibfiles = ['references.bib']
+
+
 numpydoc_show_class_members = False
 autosummary_generate = ["reference.rst"]
 autoclass_content = "class"
