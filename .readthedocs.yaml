@@ -13,3 +13,6 @@ sphinx:
 python:
   install:
     - requirements: docs/requirements.txt
+
+bibtex_bibfiles:
+    - references.bib
