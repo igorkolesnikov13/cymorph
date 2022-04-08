@@ -23,11 +23,9 @@ extensions = [
     'sphinx.ext.intersphinx',
     'numpydoc',
     'nbsphinx',
-    'IPython.sphinxext.ipython_console_highlighting',
-    'sphinxcontrib.bibtex'
+    'IPython.sphinxext.ipython_console_highlighting'
 ]
 
-bibtex_bibfiles = ['references.bib']
 
 
 numpydoc_show_class_members = False
