@@ -2,6 +2,11 @@ import sys
 import os
 import sphinx_rtd_theme
 
+# generate api directory if it doesn't already exist
+if not os.path.exists('api'):
+    os.mkdir('api')
+    
+
 # Configuration file for the Sphinx documentation builder.
 
 # -- Project information
