@@ -1,3 +1,6 @@
+.. toctree::
+   :hidden:
+
 CyMorph
 =======
 
@@ -40,15 +43,11 @@ Usage Guide
 -----------
 
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    tutorial
    metrics
-
-.. toctree::
-   :hidden:
-
-   reference
+   API reference <_autosummary/cymorph>
 
 For complete API documentation, see :doc:`reference`.
 
