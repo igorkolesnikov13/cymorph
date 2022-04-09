@@ -1,7 +1,6 @@
 import sys
 import os
 import sphinx_rtd_theme
-from cymorph.asymmetry import Asymmetry
 
 # generate api directory if it doesn't already exist
 if not os.path.exists('api'):
