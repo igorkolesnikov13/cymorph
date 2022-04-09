@@ -1,11 +1,12 @@
 import sys
 import os
 import sphinx_rtd_theme
+from cymorph.asymmetry import Asymmetry
 
 # generate api directory if it doesn't already exist
 if not os.path.exists('api'):
     os.mkdir('api')
-    
+
 
 # Configuration file for the Sphinx documentation builder.
 
@@ -33,12 +34,13 @@ extensions = [
 
 
 
-numpydoc_show_class_members = False
-autosummary_generate = ["reference.rst"]
-autoclass_content = "class"
-autodoc_default_flags = ["members", "no-special-members"]
-
+autosummary_generate = True
 templates_path = ['_templates']
+
+# numpydoc_show_class_members = False
+# autoclass_content = "class"
+# autodoc_default_flags = ["members", "no-special-members"]
+
 source_suffix = '.rst'
 master_doc = 'index'
 
@@ -49,7 +51,6 @@ intersphinx_mapping = {
 }
 intersphinx_disabled_domains = ['std']
 
-templates_path = ['_templates']
 
 # -- Options for HTML output
 

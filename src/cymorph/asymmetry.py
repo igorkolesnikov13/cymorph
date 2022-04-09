@@ -52,7 +52,11 @@ class Asymmetry:
 
     @property
     def get_pearsonr(self):
-        """Pearson rank asymmetry coeficient"""
+        """Pearson rank asymmetry coeficient
+         
+        Returns:
+            Pearson rank asymmetry coeficient : `float`
+        """
         symmetry_pearsonr_correlation_coeficient = pearsonr(
             self.asymmetry_v1, self.asymmetry_v2)[0]
         
