@@ -5,6 +5,17 @@ import matplotlib.pyplot as plt
 
 class G2:
     def __init__(self, segmented_image, g2_modular_tolerance, g2_phase_tolerance) -> None:
+        if segmented_image.ndim != 2:
+            raise ValueError("array must be 2-d")
+        if segmented_image.dtype != 'float32':
+            raise ValueError("array must be np.float32")
+        if segmented_image.shape[0] != segmented_image.shape[1]:
+            raise ValueError("array must be square")
+        if segmented_image.size == 0:
+            raise ValueError("the size array can not be 0")
+        if segmented_image.shape[0]%2 == 0:
+            raise ValueError("the stamp shape should be odd")
+        
         self.segmented_image = segmented_image
         self.g2_modular_tolerance = g2_modular_tolerance
         self.g2_phase_tolerance = g2_phase_tolerance

@@ -4,6 +4,15 @@ import seaborn as sns
 
 class Entropy:
     def __init__(self, segmented_image, entropy_bins) -> None:
+        if segmented_image.ndim != 2:
+            raise ValueError("array must be 2-d")
+        if segmented_image.dtype != 'float32':
+            raise ValueError("array must be np.float32")
+        if segmented_image.shape[0] != segmented_image.shape[1]:
+            raise ValueError("array must be square")
+        if segmented_image.size == 0:
+            raise ValueError("the size array can not be 0")
+
         self.segmented_image = segmented_image
         self.entropy_bins = entropy_bins
     

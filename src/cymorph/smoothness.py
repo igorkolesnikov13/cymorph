@@ -3,7 +3,33 @@ from scipy.stats.stats import pearsonr, spearmanr
 import matplotlib.pyplot as plt
 
 class Smoothness:
-    def __init__(self, clean_image, segmented_mask, smoothing_degradation, butterworth_order) -> None:
+    """
+    Smoothness(clean_image, segmented_mask, smoothing_degradation, butterworth_order)
+
+    Extracts _smoothness metrics (pearson rank and spearman rank) from the supplied image.
+
+    Parameters
+    ----------
+    clean_image : 2-d `~numpy.ndarray`
+        Data array.
+    segmented_mask : 2-d `~numpy.ndarray`
+        Mask array.
+    smoothing_degradation : float
+        Degradation level of the image.
+    butterworth_order : int
+        Butterworth order.
+    """
+    def __init__(self, clean_image, segmented_mask, smoothing_degradation, butterworth_order):
+        if clean_image.ndim != 2:
+            raise ValueError("array must be 2-d")
+        if clean_image.dtype != 'float32':
+            raise ValueError("array must be np.float32")
+        if clean_image.shape[0] != clean_image.shape[1]:
+            raise ValueError("array must be square")
+        if clean_image.size == 0:
+            raise ValueError("the size array can not be 0")
+
+        
         self.segmented_image = clean_image * segmented_mask
         self.clean_image = clean_image
         self.segmented_mask = segmented_mask
@@ -11,14 +37,15 @@ class Smoothness:
         self.butterworth_order = butterworth_order
         self.height, self.width = self.clean_image.shape
 
-        self.smoothness()
+        self._smoothness()
         
-    def smoothness(self):
-        self.smoothed_image = self.get_smoothed_image()
+    def _smoothness(self):
+        self.smoothed_image = self._get_smoothed_image()
 
         self.smoothness_v1, self.smoothness_v2, self.final_image = get_smoothness(self.segmented_image, self.smoothed_image)
     
     def get_collected_points_plot(self):
+        """Correlation plot between original and rotated image"""
         px = 1/plt.rcParams['figure.dpi']  # pixel in inches
         # coluna, linha
         fig_size = (500*px, 500*px)
@@ -30,12 +57,17 @@ class Smoothness:
         
         return ax
 
-    def get_smoothed_image(self):
+    def _get_smoothed_image(self):
         smoothed_image_aux = filter_butterworth_2d(self.clean_image, self.smoothing_degradation, self.butterworth_order, self.height/2)
 
         return smoothed_image_aux * self.segmented_mask
 
     def get_pearsonr(self):
+        """Pearson rank asymmetry coeficient
+         
+        Returns:
+            Pearson rank asymmetry coeficient : `float`
+        """
         try:
             symmetry_pearsonr_correlation_coeficient  = pearsonr(self.smoothness_v1, self.smoothness_v2)[0]
         except TypeError:
@@ -44,6 +76,7 @@ class Smoothness:
         return (1 - symmetry_pearsonr_correlation_coeficient)
     
     def get_spearmanr(self):
+        """Spearman rank asymmetry coeficient"""
         try:
             symmetry_spearmanr_correlation_coeficient = spearmanr(self.smoothness_v1, self.smoothness_v2)[0]
         except TypeError:

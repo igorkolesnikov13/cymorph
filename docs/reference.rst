@@ -6,7 +6,9 @@ Reference/API
 
 .. autosummary::
    :toctree: _autosummary
-   :template: custom-module-template.rst
-   :recursive:
 
-   cymorph
+   cymorph.concentration.Concentration
+   cymorph.asymmetry.Asymmetry
+   cymorph.smoothness.Smoothness
+   cymorph.entropy.Entropy
+   cymorph.g2.G2

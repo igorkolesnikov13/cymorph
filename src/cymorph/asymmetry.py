@@ -11,21 +11,18 @@ class Asymmetry:
 
     Parameters
     ----------
-    data : 2-d `~numpy.ndarray`
+    segmented_image : 2-d `~numpy.ndarray`
         Data array.
     """
-
-    def __init__(self, segmented_image) -> None:
+    def __init__(self, segmented_image):
         if segmented_image.ndim != 2:
             raise ValueError("array must be 2-d")
         if segmented_image.dtype != 'float32':
             raise ValueError("array must be np.float32")
-        if segmented_image.shape[0] == segmented_image.shape[1]:
+        if segmented_image.shape[0] != segmented_image.shape[1]:
             raise ValueError("array must be square")
         if segmented_image.size == 0:
             raise ValueError("the size array can not be 0")
-        if segmented_image[segmented_image!=0] < 70:
-            raise ValueError("too few valuable pixels (non zero)")
 
 
         self.segmented_image = segmented_image
@@ -50,7 +47,6 @@ class Asymmetry:
 
         return ax
 
-    @property
     def get_pearsonr(self):
         """Pearson rank asymmetry coeficient
          
@@ -62,7 +58,6 @@ class Asymmetry:
         
         return (1 - symmetry_pearsonr_correlation_coeficient)
 
-    @property
     def get_spearmanr(self):
         """Spearman rank asymmetry coeficient"""
         symmetry_spearmanr_correlation_coeficient = spearmanr(
