@@ -30,11 +30,10 @@ class Asymmetry:
     
 
     def _asymmetry(self):
-        self.asymmetry_v1, self.asymmetry_v2, self.rotated_image, self.final_image, self.collected_points = get_asymmetry(
-            self.segmented_image)
+        self.asymmetry_v1, self.asymmetry_v2, self.rotated_image, self.final_image, self.collected_points = get_asymmetry(self.segmented_image)
 
     def get_collected_points_plot(self):
-        """Correlation plot between original and rotated image"""
+        """(Debugging routine) Correlation plot between original and rotated image"""
         px = 1/plt.rcParams['figure.dpi']  # pixel in inches
 
         # coluna, linha
@@ -48,19 +47,21 @@ class Asymmetry:
         return ax
 
     def get_pearsonr(self):
-        """Pearson rank asymmetry coeficient
+        """
+        Pearson rank asymmetry coeficient
          
         Returns:
             Pearson rank asymmetry coeficient : `float`
         """
         symmetry_pearsonr_correlation_coeficient = pearsonr(
             self.asymmetry_v1, self.asymmetry_v2)[0]
-        
+
         return (1 - symmetry_pearsonr_correlation_coeficient)
 
     def get_spearmanr(self):
         """Spearman rank asymmetry coeficient"""
+
         symmetry_spearmanr_correlation_coeficient = spearmanr(
             self.asymmetry_v1, self.asymmetry_v2)[0]
-        
+
         return (1 - symmetry_spearmanr_correlation_coeficient)

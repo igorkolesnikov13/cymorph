@@ -3,7 +3,35 @@ import sep
 import numpy as np
 
 class Concentration:
-    def __init__(self, clean_image, radius1, radius2, rp=None, growth_curve=None, growth_radii=None) -> None:
+
+    """
+    Concentration(clean_image, radius1=0.8, radius2=0.2, rp=None, growth_curve=None, growth_radii=None)
+
+    Extracts concentration metric from the supplied image. Additionally, can calculate petrosian
+    radius, growth curve and growth radii if not supplied.
+
+    Parameters
+    ----------
+    clean_image : 2-d `~numpy.ndarray`
+        Clean image data array.
+    radius1 : int, optional
+        Value of outer radius that will enclose a give amount of galaxy flux. Default is 0.8 (80% of all flux).
+    radius2 : int, optional
+        Value of inner radius that will enclose a give amount of galaxy flux. Default is 0.2 (20% of all flux).
+    rp : float, optional
+        Value of petrosian radius in pixels. If not supplied, will be calculated at ETA=0.2.
+    growth_curve : 1-d `~numpy.ndarray`
+        Array of flux (in counts) growth curve of a galaxy. If not supplied, will be calculated.
+    growth_radii : 1-d `~numpy.ndarray`
+        Array of flux growth radii (in pixels) of a galaxy. This array should be the same length as `growth_curve`, where each value will correspond to flux value and respective radius that encloses it. If not supplied, will be calculated.
+    """
+
+    def __init__(self, clean_image, radius1=0.8, radius2=0.2, rp=None, growth_curve=None, growth_radii=None):
+        if rp is not None and (growth_curve is None or growth_radii is None):
+            raise ValueError("rp should be supplied alongside with growth_curve and growth_radii")
+        if len(growth_curve) != len(growth_radii):
+            raise ValueError("growth_curve and growth_radii should be of same length")
+
         self.clean_image = clean_image
         self.radius1 = radius1
         self.radius2 = radius2
@@ -12,7 +40,7 @@ class Concentration:
         self.growth_radii = growth_radii
 
         if rp is None:
-            ############################## Subtract Background #######################################
+            # Subtract Background
             self.background = sep.Background(
                 self.clean_image, 
                 bw = 32, 
@@ -25,7 +53,7 @@ class Concentration:
 
             self.image_no_background = self.clean_image - self.background
 
-            ############################# Get Object Shape Properties ###################################
+            # Get Object Shape Properties
             objs = sep.extract(
                 self.image_no_background, 
                 thresh = 1.5, 
@@ -44,13 +72,12 @@ class Concentration:
             self.smin = 1 / self.obj['a']
             self.step = 0.01
 
-            ########################### Estimate an Eta Profile to Define Petrosian Radius ############################ 
+            # Estimate an Eta Profile to Define Petrosian Radius 
             self._eta_func_ellipse()
 
 
 
-
-    ### Calcula o perfil de Eta (da definição de raio petrosiano)
+    # calculates ETA profile
     def _eta_func_ellipse(self):
         self.growth_curve, self.etas = [], []
         numerators, denominators = [], []
@@ -94,7 +121,7 @@ class Concentration:
         x = raio[i-numbers_around:i+numbers_around]   
         y = etas[i-numbers_around:i+numbers_around]   
         f1 = interpolate.splrep(x, y, k = 3)
-        xnew = np.linspace(min(x), max(x), num=1000001, endpoint=True)
+        xnew = np.linspace(min(x), max(x), num=10001, endpoint=True)
         ynew = interpolate.splev(xnew, f1, der=0)
         
         self.petrosian_radius = xnew[np.absolute(ynew - 0.2) == min(np.absolute(ynew - 0.2))]
@@ -133,14 +160,20 @@ class Concentration:
 
 
     def get_concentration(self):
+        """
+        Returns a concentration value
+         
+        Returns:
+            concentration : `float`
+        """
         if self.rp is None:
-            ########################## Interpolate Eta Profile to Get Exactly Eta = 0.2 #################
+            # Interpolate Eta Profile to Get Exactly Eta = 0.2
             try:
                 self._interpolate_eta_ellipse()
             except IndexError:
                 return np.nan
             
-            ########################## Define Growth Curve (acc.) and limit it to valid range #######################
+            # Define Growth Curve (acc.) and limit it to valid range
             self.growth_radii = self.scales * self.obj['a']
             
             
@@ -181,4 +214,10 @@ class Concentration:
     
 
     def get_petrosian_radius(self):
+        """
+        Return petrosian radius
+         
+        Returns:
+            petrosian_radius : `float`
+        """
         return self.petrosian_radius[0]

@@ -6,12 +6,12 @@ class Smoothness:
     """
     Smoothness(clean_image, segmented_mask, smoothing_degradation, butterworth_order)
 
-    Extracts _smoothness metrics (pearson rank and spearman rank) from the supplied image.
+    Extracts smoothness metric (pearson rank and spearman rank) from the supplied image.
 
     Parameters
     ----------
     clean_image : 2-d `~numpy.ndarray`
-        Data array.
+        Clean image data array.
     segmented_mask : 2-d `~numpy.ndarray`
         Mask array.
     smoothing_degradation : float
@@ -63,10 +63,11 @@ class Smoothness:
         return smoothed_image_aux * self.segmented_mask
 
     def get_pearsonr(self):
-        """Pearson rank asymmetry coeficient
+        """
+        Pearson rank smoothness coeficient
          
         Returns:
-            Pearson rank asymmetry coeficient : `float`
+            Pearson rank smoothness coeficient : `float`
         """
         try:
             symmetry_pearsonr_correlation_coeficient  = pearsonr(self.smoothness_v1, self.smoothness_v2)[0]
@@ -76,7 +77,12 @@ class Smoothness:
         return (1 - symmetry_pearsonr_correlation_coeficient)
     
     def get_spearmanr(self):
-        """Spearman rank asymmetry coeficient"""
+        """
+        Spearman rank smoothness coeficient
+         
+        Returns:
+            Spearman rank smoothness coeficient : `float`
+        """
         try:
             symmetry_spearmanr_correlation_coeficient = spearmanr(self.smoothness_v1, self.smoothness_v2)[0]
         except TypeError:
