@@ -37,6 +37,7 @@ cdef class G2:
         self.assimetric_pixel_count = 0
 
 
+    # debug method to add noise to phases
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
@@ -46,15 +47,8 @@ cdef class G2:
             for j in range(self.height):
                 self.phases[i,j] = self.phases[i,j] + self.phases_noise[i,j]
 
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
-    @cython.nonecheck(False)
-    @cython.cdivision(True)
-    cdef float add_pi(self):
-        for i in range(self.width):
-            for j in range(self.height):
-                self.phases[i,j] = self.phases[i,j] + M_PI
     
+    # debug method to add noise to modules
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
@@ -64,6 +58,19 @@ cdef class G2:
             for j in range(self.height):
                 self.modules_normalized[i,j] = self.modules_normalized[i,j] + self.modules_noise[i,j]
     
+
+    # aux methods
+    # add pi to phases, this is done to maintain phases 0-360 degrees
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.nonecheck(False)
+    @cython.cdivision(True)
+    cdef float add_pi(self):
+        for i in range(self.width):
+            for j in range(self.height):
+                self.phases[i,j] = self.phases[i,j] + M_PI
+
+    # modules normalization by max module
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
@@ -75,8 +82,25 @@ cdef class G2:
         for i in range(self.width):
             for j in range(self.height):
                 self.modules_normalized[i,j] = self.modules[i,j]/max_gradient
+    
+    # find maximum gradient
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.cdivision(True)
+    cdef float get_max_gradient(self):
+        cdef float max_gradient = -1.0
+        cdef int i, j
+        
+        for i in range(self.width):
+            for j in range(self.height):
+                if not isnan(self.gradient_x[j,i]) and not isnan(self.gradient_y[j,i]):
+                    if (max_gradient<0.0) or (sqrt(pow(self.gradient_y[j, i], 2.0)+pow(self.gradient_x[j, i], 2.0)) > max_gradient):
+                        # modulo campo gradiente -> distancia euclidiana (maior modulo)
+                        max_gradient = sqrt(pow(self.gradient_y[j, i],2.0)+pow(self.gradient_x[j, i],2.0))
+        
+        return max_gradient
 
-    # aux methods
+    # simple function to get min between two numbers
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
@@ -87,6 +111,7 @@ cdef class G2:
         else:
             return b
 
+    # function to find angle difference
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.nonecheck(False)
@@ -99,6 +124,7 @@ cdef class G2:
         else:
             return abs(round((a1 - (a2 + M_PI)),4)) 
 
+    # function that converst 0 to non in matrix
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.cdivision(True)
@@ -110,10 +136,11 @@ cdef class G2:
                     self.image[i,j] = self.f_nan
 
 
+    # function that constructs asymmetric field
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.cdivision(True)
-    cdef void get_asymmetryc_field_new(self):
+    cdef void get_asymmetryc_field(self):
         cdef int[:] x, y
         cdef float[:,:] distance_from_center
         cdef float[:] uniq_distance_from_center
@@ -123,6 +150,7 @@ cdef class G2:
         self.gradient_asymmetric_x = self.gradient_x.copy()
         self.gradient_asymmetric_y = self.gradient_y.copy()
 
+        # calculating phases
         self.phases = np.arctan2(self.gradient_x,self.gradient_y)
         # adding pi to maintaing everything in range 0 - 2pi (radians)
         self.add_pi()
@@ -131,8 +159,9 @@ cdef class G2:
 
         uniq_distance_from_center = np.unique(distance_from_center)
 
+        # run for each distance from center
         for distance in range(len(uniq_distance_from_center)):
-            # ele seleciona os pixeis com as distancias iguais para ver se sao simetricos ou nao
+            # selects pixels with equal distances to see if they are symmetrical or not
             x, y = self.get_pixels_same_distance_from_center(distance_from_center, distance)
             pixel_pairs_count = len(x)
             
@@ -143,21 +172,21 @@ cdef class G2:
                 if isnan(self.image[x[i], y[i]]):
                     continue
                 
-                #if (self.modules[x[i], y[i]]/max_gradient <= self.module_tolerance):
                 if (self.modules_normalized[x[i], y[i]] <= self.module_tolerance):
-                    # se vetor for muito pequeno, ele é considerado simetrico
+                    # if vector is too small, it is considered symmetric
                     self.gradient_asymmetric_x[x[i], y[i]] = self.f_nan
                     self.gradient_asymmetric_y[x[i], y[i]] = self.f_nan
                 
+                # getting opposite pixel
                 opposite_pixel = self.get_opposite_pixel(x[i], y[i])
                 
                 if opposite_pixel[0] == -1:
                     continue
                 if isnan(self.image[opposite_pixel[0], opposite_pixel[1]]):
                     continue
-                #if (self.modules[opposite_pixel[0], opposite_pixel[1]]/max_gradient <= self.module_tolerance):
+
                 if (self.modules_normalized[opposite_pixel[0], opposite_pixel[1]] <= self.module_tolerance):
-                    # se vetor for muito pequeno, ele é considerado simetrico
+                    # if vector is too small, it is considered symmetric
                     self.gradient_asymmetric_x[opposite_pixel[0], opposite_pixel[1]] = self.f_nan
                     self.gradient_asymmetric_y[opposite_pixel[0], opposite_pixel[1]] = self.f_nan
 
@@ -169,6 +198,7 @@ cdef class G2:
                         self.gradient_asymmetric_x[opposite_pixel[0], opposite_pixel[1]] = self.f_nan
                         self.gradient_asymmetric_y[opposite_pixel[0], opposite_pixel[1]] = self.f_nan
     
+    # function that return (if such) opposite pixel
     cdef tuple get_opposite_pixel(self, int pixel_x, int pixel_y):
         #0 - x; 1 - y
         cdef int opposite_pixel_x=-1, opposite_pixel_y=-1
@@ -231,23 +261,7 @@ cdef class G2:
     
         return opposite_pixel_x, opposite_pixel_y
 
-
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
-    @cython.cdivision(True)
-    cdef float get_max_gradient(self):
-        cdef float max_gradient = -1.0
-        cdef int i, j
-        
-        for i in range(self.width):
-            for j in range(self.height):
-                if not isnan(self.gradient_x[j,i]) and not isnan(self.gradient_y[j,i]):
-                    if (max_gradient<0.0) or (sqrt(pow(self.gradient_y[j, i], 2.0)+pow(self.gradient_x[j, i], 2.0)) > max_gradient):
-                        # modulo campo gradiente -> distancia euclidiana (maior modulo)
-                        max_gradient = sqrt(pow(self.gradient_y[j, i],2.0)+pow(self.gradient_x[j, i],2.0))
-        
-        return max_gradient
-
+    # getting list of pixels that have same distance from center
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.cdivision(True)
@@ -266,6 +280,7 @@ cdef class G2:
         x, y = np.array(x2, dtype=np.int32), np.array(y2, dtype=np.int32)
         return (x,y)
 
+    # calculating confluence
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.cdivision(True)
@@ -301,6 +316,7 @@ cdef class G2:
         
         return confluence
     
+    # entry point
     def get_g2(self):
         cdef int  i, j
         cdef float confluence, g2
@@ -312,12 +328,12 @@ cdef class G2:
         self.modules = np.array([[sqrt(pow(self.gradient_y[j, i],2.0)+pow(self.gradient_x[j, i],2.0)) for i in range(self.width) ] for j in range(self.height)], dtype=np.float32)
         self.normalize_modules()
         
-        self.get_asymmetryc_field_new()
+        self.get_asymmetryc_field()
 
         confluence = self.get_confluence()
         if float(self.valid_pixels_count) > 0:
             g2 = (float(self.assimetric_pixel_count) / float(self.valid_pixels_count)) * (2.0 - confluence)
         else:
-            g2 = self.f_nan
+            raise ValueError('Not enough valid pixels in image for g2 extraction')
 
         return g2, self.gradient_x, self.gradient_y, self.gradient_asymmetric_x, self.gradient_asymmetric_y, self.modules_normalized, self.phases
