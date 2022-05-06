@@ -2,6 +2,7 @@ from cymorph.cython_entropy import get_entropy
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 class Entropy:
     """
     Entropy(segmented_image, entropy_bins=130)
@@ -15,6 +16,7 @@ class Entropy:
     entropy_bins : int, optional
         Number of bins to split image data. Default is 130
     """
+
     def __init__(self, segmented_image, entropy_bins=130):
         if segmented_image.ndim != 2:
             raise ValueError("array must be 2-d")
@@ -27,7 +29,7 @@ class Entropy:
 
         self.segmented_image = segmented_image
         self.entropy_bins = entropy_bins
-    
+
     def get_bins_plot(self):
         """(Debugging routine) Histogram plot showing the flux distribution"""
         line = self.segmented_image.flatten()
@@ -47,9 +49,8 @@ class Entropy:
     def get_entropy(self):
         """
         Get entropy metric.
-         
+
         Returns:
             entropy_metric : `float`
         """
         return get_entropy(self.segmented_image, self.entropy_bins)
-    
