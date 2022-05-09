@@ -2,24 +2,21 @@
 _Updated and adjusted and repacked version of 1st CyMorph version:
 https://github.com/rsautter/CyMorph & Paulo Barchi work_
 
-### Contributors
-
-- Igor Kolesnikov
-- Vitor Sampaio
-- Paulo Barchi
-- Rubens Sautter
 
 ## Installation
 Dependencies:
 ```
 pip install numpy scipy matplotlib seaborn sep
 ```
-CyMorph Package (tesing mode)
+CyMorph can be installed with:
 ```
-pip install -i https://test.pypi.org/simple/ cymorph
+pip install cymorph
 ```
 
-## Usage
+## Documentation
+https://cymorph.readthedocs.io/
+
+## Basic Usage
 
 
 ### Concentration
@@ -65,3 +62,10 @@ g2.get_g2()
 g2.get_gradient_plot()
 g2.get_asymmetry_gradient_plot()
 ```
+
+### Contributors
+
+- Igor Kolesnikov
+- Vitor Sampaio
+- Paulo Barchi
+- Rubens Sautter
