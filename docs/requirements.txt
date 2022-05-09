@@ -6,3 +6,4 @@ fitsio
 numpydoc
 jupyter
 sphinxcontrib-bibtex
+cymorph
