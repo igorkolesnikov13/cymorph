@@ -40,9 +40,9 @@ Dependencies ::
 
     pip install numpy scipy matplotlib seaborn sep
 
-CyMorph (currently in tesing mode) ::
+CyMorph ::
 
-    pip install -i https://test.pypi.org/simple/ cymorph
+    pip install cymorph
 
 Usage Guide
 -----------
