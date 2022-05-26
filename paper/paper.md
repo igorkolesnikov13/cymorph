@@ -11,10 +11,10 @@ authors:
    orcid: 0000-0002-1189-0112
    affiliation: "1"
  - name: Vitor Medeiros Sampaio
-   orcid: 0000-0000-0000-0000
+   orcid: 0000-0001-6556-637X
    affiliation: "2"
  - name: Reinaldo Ramos de Carvalho
-   orcid: 0000-0000-0000-0000
+   orcid: 0000-0002-1283-3363
    affiliation: "2"
 affiliations:
  - name: Instituto Nacional de Pesquisas Espaciais, São José dos Campos, Brazil
@@ -39,13 +39,13 @@ CyMorph requires only an input image and, if needed, tuning of the parameters in
 
 When CyMorph is used to quantify galactic morphology, each metric is supposed to represent how a given physical mechanism alters the shape of the system and we know that this is true in several cases @conselice2003relationship. CyMorph estimates the following parameters:
 
-- Concentration (C) -  measures how tight is the flux distribution of a given galaxy;
-- Asymmetry (A) - as name says, it quantifies how symmetric the galaxy is;
-- Smoothness (S) (also called Clumpiness) determines how clumpy the distribution is, being sensitive to the the presence of star-forming regions in a late-type galaxy; 
-- Entropy (H) -  in this case we measure the Shannon entropy which reflects the average amount of information in the image, and
-- $G_2$ - is the second moment of the image gradient pattern which gives the integral of all the assymetric vectors.
+- Concentration ($C$) -  measures how tight is the flux distribution of a given galaxy;
+- Asymmetry ($A$) - as name says, it quantifies how symmetric the galaxy is;
+- Smoothness ($S$) (also called Clumpiness) determines how clumpy the distribution is, being sensitive to the the presence of star-forming regions in a late-type galaxy; 
+- Entropy ($H$) -  in this case we measure the Shannon entropy which reflects the average amount of information in the image, and
+- $G_2$ - is the second moment of the image gradient pattern which gives the integral of all the asymmetric vectors.
 
-One of the most traditional systems designed to systematize the observed varieties of morphologies is based on Concentration, Asymmetry, and Smoothness e.g., @conselice2003relationship. These parameters have been used to study the physical properties of galaxies. Concentration is critical to distinguish between early- and late-type systems @conselice2003relationship. Also, as shown by @graham2001correlation, C well correlates with central velocity dispersion, galaxy size, luminosity, and black hole mass. [@conselice2000asymmetry; @conselice2003relationship] indicate that A is a good morphological indicator of galaxy interactions and mergers. These processes vary with redshift, so A may be valuable in extending the morphological analysis to the high redshift range. @conselice2003relationship studies how the S parameter may be associated to the star formation history. Early-type galaxies  (ETG) exhibit little signs of star formation and should result in low values of smoothness, while late-type galaxies (LTG) should have more pronounced star-forming regions, and by consequence, higher smoothness values, and in fact that is what is observed. The CAS system, together with H and $G_2$, is very effective  in distinguishing between early- and late-type galaxies and a combination of them may provide a solid intuition to find other classes still unknown. More important than having indicators that distinguish early- and late-type galaxies is that they reflect physical properties that can be examined in different environments and at different redshifts, probing the way galaxies evolve.
+One of the most traditional systems designed to systematize the observed varieties of morphologies is based on Concentration, Asymmetry, and Smoothness e.g., @conselice2003relationship. These parameters have been used to study the physical properties of galaxies. Concentration is critical to distinguish between early- and late-type systems @conselice2003relationship. Also, as shown by @graham2001correlation, C well correlates with central velocity dispersion, galaxy size, luminosity, and black hole mass. [@conselice2000asymmetry; @conselice2003relationship] indicate that A is a good morphological indicator of galaxy interactions and mergers. These processes vary with redshift, so A may be valuable in extending the morphological analysis to the high redshift range. @conselice2003relationship studies how the S parameter may be associated to the star formation history. Early-type galaxies  (ETG) exhibit little signs of star formation and should result in low values of smoothness, while late-type galaxies (LTG) should have more pronounced star-forming regions, and by consequence, higher smoothness values, and in fact that is what is observed. The CAS system, together with H and $G_2$, is very effective  in distinguishing between early- and late-type galaxies and a combination of them may provide a solid intuition to find other classes still unknown. More important than having indicators distinguishing early- and late-type galaxies is that they reflect physical properties that can be examined in different environments and at different redshifts, probing the way galaxies evolve.
 
 ## Morphometry and Machine learning
 
