@@ -336,4 +336,4 @@ cdef class G2:
         else:
             raise ValueError('Not enough valid pixels in image for g2 extraction')
 
-        return g2, self.gradient_x, self.gradient_y, self.gradient_asymmetric_x, self.gradient_asymmetric_y, self.modules_normalized, self.phases
+        return g2, self.gradient_x, self.gradient_y, self.gradient_asymmetric_x, self.gradient_asymmetric_y, self.modules_normalized, self.phases, self.valid_pixels_count, self.assimetric_pixel_count 
